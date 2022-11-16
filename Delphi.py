@@ -3,6 +3,8 @@ import idaapi
 import idautils
 import collections
 
+from idaapi import *
+
 addr = 0
 EP = 0
 info = idaapi.get_inf_structure()
@@ -47,11 +49,11 @@ class MyDbgHook(DBG_Hooks):
             try:
                 idc.create_insn(func_addr) # Mark as Code if not ..
                 ida_funcs.add_func(func_addr) # Mark as Function if not ..
-                idc.set_name(func_addr, "_DE_"+func_name, idc.SN_NOWARN)
-            except:
-                pass
+                idc.set_name(func_addr, "_DE_"+func_name.decode('utf-8'), idc.SN_CHECK)
+            except Exception as e:
+                print(e)
             
-            print("func addr : 0x%x name : %s" % ( func_addr , func_name ))
+            print("func addr : 0x%x name : %s" % ( func_addr , func_name.decode('utf-8') ))
             idaapi.continue_process()
         if (ea == EP):
             idaapi.continue_process()       
